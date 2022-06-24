@@ -1,0 +1,80 @@
+
+// custom type ?? typedjson on typedjson
+
+type Prop {
+    _ type: Typed,
+    description: string
+}
+
+type Array {
+    _ item: Typed
+}
+
+interface Typed {
+
+}
+
+
+//////
+
+let Car = object {
+    make: String
+}
+
+let SomeUnion = Union { 
+    String,
+    Number,
+    Car,
+}
+
+let CarProp = Prop {
+    String, description: 'car'
+}
+
+interface Model {
+    name: string
+    props: Record<stirng, Type>
+}
+
+const model: Model = {
+    name: "asd",
+    props: {
+        name:  Optional { String },
+        mbName:  { Optional { String {} } },
+        cars: Array { Car { desc: 'asd'} },
+        externalCar: CarProp
+    },
+    events: {
+        x: { String, description: "asd" }
+    }
+}
+
+
+
+let Car = object {
+    make: String
+} //
+{
+    getCars: Get {
+        input: Json { id: String }
+        output: Car
+    }
+    addCar: Post {
+        input: Car
+        ouput: object { created: Bool }
+    }
+}
+
+
+
+import {Endpoints} from './model.dls'
+
+
+const endpoints: Endpoints = {
+    getCars: (input) => {
+        return 'sd'
+    },
+    addCar: (input) => {
+        return {}
+    },
+}

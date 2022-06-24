@@ -1,0 +1,11 @@
+
+
+{
+    "name": "asd",
+    "props": {
+        "name": {"type": "string"}
+    },
+    "events": {
+        "x": { "type": {"type": "string"}, "description": "asd" }
+    }
+}

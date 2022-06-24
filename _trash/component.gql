@@ -1,0 +1,37 @@
+{
+    "name": 'Button',
+    "meta": {
+        "stalable": true
+    }
+}
+
+
+import 
+const Compo = dsl.Component( { name: 'button'}, meta: {stalable?: Boolean});
+
+
+type Component {
+    name: 'button'
+    meta: {
+        stulable: true
+    }
+}
+
+
+VideoCall {
+    Vadym: { Mac },
+    Bodya: { Iphone },
+    Vady : "asd"
+    # Yarsolav: { Movtchut }
+}
+
+# 
+
+const Deivce = Interface();
+
+
+const Mac = Type({conforms: Device})
+const Iphone = Type({conforms: Device})
+
+const Model = Record({ prop: Device })
+
