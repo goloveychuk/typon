@@ -1,0 +1,42 @@
+{
+    "name": "adsl-extension",
+    "displayName": "adsl-extension",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.68.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "dependencies": {
+        "vscode-languageclient": "^8.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "@types/vscode": "^1.68.0",
+        "typescript": "4.7.3"
+    },
+    "contributes": {
+        "languages": [
+            {
+                "id": "adsl",
+                "aliases": [
+                    "adsl",
+                    "adsl"
+                ],
+                "extensions": [
+                    ".adsl"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "adsl",
+                "scopeName": "source.adsl",
+                "path": "./syntaxes/adsl.tmLanguage.json"
+            }
+        ]
+    }
+}
