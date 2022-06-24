@@ -58,11 +58,11 @@ connection.onInitialize((params: InitializeParams) => {
 			completionProvider: {
 				resolveProvider: true
 			},
-            semanticTokensProvider: {
-                legend: {
-                    tokenTypes: Object.keys(SemanticTokenTypes)
-                }
-            }
+            // semanticTokensProvider: {
+                // legend: {
+                //     tokenTypes: Object.keys(SemanticTokenTypes)
+                // }
+            // }
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -74,9 +74,11 @@ connection.onInitialize((params: InitializeParams) => {
 	}
 	return result;
 });
-connection.languages.semanticTokens.on(req => {
+// connection.languages.semanticTokens.on(req => {
     
-})
+
+
+// })
 connection.onInitialized(() => {
 	if (hasConfigurationCapability) {
 		// Register for all configuration changes.
@@ -235,7 +237,7 @@ connection.onCompletionResolve(
 );
 
 
-connection.client.connection.sema
+// connection.client.connection.sema
 
 
 

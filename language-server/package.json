@@ -4,6 +4,7 @@
 	"engines": {
 		"node": "*"
 	},
+	"main": "dist/index",
 	"dependencies": {
 		"adsl-compiler": "^1.0.0",
 		"vscode-languageserver": "^8.0.1",

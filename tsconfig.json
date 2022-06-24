@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "noEmitOnError": false
+    },
+    "references": [
+        { "path": "./vscode-extension" },
+        { "path": "./language-server" },
+    ],
+    "files": [],
+    "include": []
+}

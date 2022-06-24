@@ -17,6 +17,18 @@
         "@types/vscode": "^1.68.0",
         "typescript": "4.7.3"
     },
+    "scripts": {
+		"vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "yarn run compile && yarn run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+    "main": "./dist/index.js",
+    "activationEvents": [
+		"onLanguage:adsl"
+	],
     "contributes": {
         "languages": [
             {

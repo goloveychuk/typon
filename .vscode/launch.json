@@ -8,7 +8,16 @@
       "name": "Extension",
       "type": "extensionHost",
       "request": "launch",
-      "args": ["--extensionDevelopmentPath=${workspaceFolder}/extension"]
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}/vscode-extension"],
+      "outFiles": ["${workspaceRoot}/vscode-extension/dist/**/*.js"],
+    },
+    {
+        "type": "node",
+        "request": "attach",
+        "name": "Attach to Server",
+        "port": 6009,
+        "restart": true,
+        "outFiles": ["${workspaceRoot}/language-server/dist/**/*.js"]
     },
     {
       "type": "pwa-node",
@@ -19,5 +28,11 @@
       "program": "${workspaceFolder}/compiler/src/index.ts",
       "outFiles": ["${workspaceFolder}/**/*.js"]
     }
-  ]
+  ],
+  "compounds": [
+    {
+        "name": "Client + Server",
+        "configurations": ["Extension", "Attach to Server"]
+    }
+]
 }
