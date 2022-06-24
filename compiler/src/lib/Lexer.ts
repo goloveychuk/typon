@@ -7,6 +7,7 @@
 
 export interface TokenPosition {
     readonly index: number;
+    readonly indexEnd: number
     readonly rowBegin: number;
     readonly columnBegin: number;
     readonly rowEnd: number;
@@ -62,7 +63,7 @@ class TokenImpl<T> implements Token<T> {
         public kind: T,
         public text: string,
         public pos: TokenPosition,
-        public keep: boolean
+        public keep: Keep
     ) {
     }
 
@@ -83,8 +84,12 @@ class TokenImpl<T> implements Token<T> {
     }
 }
 
+type Keep = true | false | 'skipOnParse'
+
+type  Rule<T> = [Keep, RegExp, T]
+
 class LexerImpl<T> implements Lexer<T> {
-    constructor(public rules: [boolean, RegExp, T][]) {
+    constructor(public rules: Rule<T>[]) {
         for (const rule of this.rules) {
             if (rule[1].source[0] !== '^') {
                 throw new Error(`Regular expression patterns for a tokenizer should start with "^": ${rule[1].source}`);
@@ -120,7 +125,7 @@ class LexerImpl<T> implements Lexer<T> {
                     }
                 }
 
-                const newResult = new TokenImpl<T>(this, input, kind, text, { index: indexStart, rowBegin, columnBegin, rowEnd, columnEnd }, keep);
+                const newResult = new TokenImpl<T>(this, input, kind, text, { index: indexStart, indexEnd: indexStart + text.length, rowBegin, columnBegin, rowEnd, columnEnd }, keep);
                 if (result === undefined || result.text.length < newResult.text.length) {
                     result = newResult;
                 }
@@ -129,7 +134,7 @@ class LexerImpl<T> implements Lexer<T> {
 
         if (result === undefined) {
             throw new TokenError(
-                { index: indexStart, rowBegin, columnBegin, rowEnd: rowBegin, columnEnd: columnBegin },
+                { index: indexStart, indexEnd: -1, rowBegin, columnBegin, rowEnd: rowBegin, columnEnd: columnBegin },
                 `Unable to tokenize the rest of the input: ${input.substr(indexStart)}`
             );
         } else {
@@ -139,6 +144,7 @@ class LexerImpl<T> implements Lexer<T> {
 
     public parseNextAvailable(input: string, index: number, rowBegin: number, columnBegin: number): TokenImpl<T> | undefined {
         let token: TokenImpl<T> | undefined;
+
         while (true) {
             token = this.parseNext(
                 input,
@@ -146,15 +152,23 @@ class LexerImpl<T> implements Lexer<T> {
                 (token === undefined ? rowBegin : token.pos.rowEnd),
                 (token === undefined ? columnBegin : token.pos.columnEnd)
             );
+
             if (token === undefined) {
                 return undefined;
-            } else if (token.keep) {
+            } else {
+                if (token.keep === false) {
+                    continue
+                }
+                if (token.keep === 'skipOnParse') {
+                    return token
+                }
+                
                 return token;
             }
         }
     }
 }
 
-export function buildLexer<T>(rules: [boolean, RegExp, T][]): Lexer<T> {
+export function buildLexer<T>(rules: Rule<T>[]): Lexer<T> {
     return new LexerImpl<T>(rules);
 }

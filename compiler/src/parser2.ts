@@ -1,20 +1,6 @@
 import {
-  buildLexer,
-  seq,
-  list_sc,
-  tok,
-  rule,
-  str,
-  opt,
-  opt_sc,
-  alt,
-  kmid,
-  kleft,
-  kright,
-  expectEOF,
-  expectSingleResult,
-  Token,
-  apply,
+  buildLexer, ParserOutput,
+  
 } from './lib';
 
 enum TokenKind {
@@ -26,12 +12,12 @@ enum TokenKind {
   True,
   False,
   Identifier,
-  PropSep,
+  Colon,
   Comment,
   Comma,
 }
 
-namespace ast {
+export namespace ast {
   export interface StringLiteral {
     kind: 'StringLiteral';
     val: string;
@@ -80,7 +66,7 @@ const tokenizer = buildLexer([
   [true, /^{/g, TokenKind.OpenBracket],
   [true, /^}/g, TokenKind.CloseBracket],
   [true, /^\w+/g, TokenKind.Identifier],
-  [true, /^:/g, TokenKind.PropSep],
+  [true, /^:/g, TokenKind.Colon],
   [true, /^,/g, TokenKind.Comma],
   [false, /^\/\/[^\n]*/g, TokenKind.Comment],
   [false, /^\s+/g, TokenKind.Space],
@@ -122,7 +108,7 @@ const propVal = alt(
 
 const propIdentifier = apply(tok(TokenKind.Identifier), (val) => val.text);
 
-const optPropName = opt_sc(kleft(propIdentifier, tok(TokenKind.PropSep)));
+const optPropName = opt_sc(kleft(propIdentifier, tok(TokenKind.Colon)));
 
 const propDecl = apply(
   seq(optPropName, propVal),
@@ -174,35 +160,93 @@ const objectParser = apply(
 
 objectRule.setPattern(objectParser);
 
-const rootParser = objectParser;
-
-const codeToParse = `
-{}
-
-`
-
-const codeToParse2 = `
-{    
-    // asd: 23,
-    // asd3: true,
-    // text: 'sd    "f',
-    // text2: "sdfdf'",
-    nested: SomeType {
-        x: {
-
-        },
-        prop: 'sdf',
-    },
-    nested2: {
-        prop: 'sdf', //comm
-        //;;l
-    },
-    asd: Optional { String { }, },
+interface Token {
+  kind: TokenKind
 }
-`;
 
-const tokens = tokenizer.parse(codeToParse);
+class ParsingContext {
 
-const numberArray = expectSingleResult(expectEOF(rootParser.parse(tokens)));
+  diagnostics = []
 
-console.log(JSON.stringify(numberArray, undefined, 4));
+  forceReadToken(tokenKind: TokenKind, errMsg?: string): Token  {
+    const token = this.tryReadToken(tokenKind);
+    if (token === undefined) {
+      const err = errMsg ?? `expecting ${TokenKind[tokenKind]}`
+      this.diagnostics.push(err);
+    }
+  }
+  isNextToken(tokenKind: TokenKind): boolean {
+  }
+  getNextToken(): Token {
+  }
+
+  // tryReadToken(tokenKind: TokenKind): Token | null {
+
+  // }
+}
+
+
+function parseList<T>(ctx: ParsingContext, parseItem: (ctx: ParsingContext) => T, sep: TokenKind, end: TokenKind) {
+  const items: T[] = [];
+  while (true) {
+    if (ctx.isNextToken(end))  {
+      break
+    }
+    if (items.length > 0) {
+      ctx.forceReadToken(sep) //stopping parsing?
+    }
+    const item = parseItem(ctx);
+    items.push(item)
+  }
+  if (items.length) {
+
+  }
+  return items
+}
+
+function parseProperty(ctx: ParsingContext): ast.Property {
+
+  branch( (reader) => {
+    readOrStop(Identifier)
+    readOrStop(Colon)
+    
+    parsePropertyValue(ctx)
+  })
+
+  
+  
+  mbReadToken(TokenKind.Comma)
+
+  return {
+    kind: 'Property',
+    name,
+  }
+}
+
+function parseObject(ctx: ParsingContext): ast.ObjectDeclaration {
+  ctx.forceReadToken(TokenKind.OpenBracket)
+
+
+  const properties = parseList(ctx, parseProperty, TokenKind.Comma, TokenKind.CloseBracket)
+  ctx.forceReadToken(TokenKind.CloseBracket)
+
+}
+
+function parseRoot(ctx: ParsingContext) {
+  return parseObject(ctx)
+}
+
+export const parse = (codeToParse: string) => {
+  const tokens = tokenizer.parse(codeToParse);
+  
+  
+  return res
+}
+
+
+{
+  asd: 
+
+
+
+

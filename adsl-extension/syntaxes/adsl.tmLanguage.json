@@ -1,0 +1,74 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "adsl",
+
+  "variables": {
+    "startOfIdentifier": "\\b",
+    "endOfIdentifier": "\\b"
+  },
+
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#string"
+    },
+    {
+      "include": "#boolean-literal"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+    
+      ]
+    },
+    "boolean-literal": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.true.adsl",
+          "match": "\\btrue\\b"
+        },
+        {
+          "name": "constant.language.boolean.false.adsl",
+          "match": "\\bfalse\\b"
+        }
+      ]
+    },
+    "string": {
+      "patterns": [
+        {
+          "include": "#qstring-single"
+        },
+        {
+          "include": "#qstring-double"
+        }
+      ]
+    },
+
+    "qstring-double": {
+      "name": "string.quoted.double.adsl",
+      "begin": "\"",
+      "end": "(\")|((?:[^\\\\\\n])$)",
+      "patterns": [
+        {
+          "name": "constant.character.escape.adsl",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "qstring-single": {
+      "name": "string.quoted.double.adsl",
+      "begin": "'",
+      "end": "(\\')|((?:[^\\\\\\n])$)",
+      "patterns": [
+        {
+          "name": "constant.character.escape.adsl",
+          "match": "\\\\."
+        }
+      ]
+    }
+  },
+  "scopeName": "source.adsl"
+}
