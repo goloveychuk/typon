@@ -20,9 +20,9 @@
         "outFiles": ["${workspaceRoot}/language-server/dist/**/*.js"]
     },
     {
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Launch compiler",
       "skipFiles": ["<node_internals>/**"],
       "runtimeArgs": ["-r", "ts-node/register/transpile-only"],
       "program": "${workspaceFolder}/compiler/src/index.ts",

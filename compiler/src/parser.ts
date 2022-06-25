@@ -13,11 +13,9 @@ import {
   kright,
   expectEOF,
   expectSingleResult,
-  Token,
   apply,
-  TokenPosition,
-} from './lib';
-import { forEachChild } from './stolen';
+} from './parsec';
+import {TokenPosition} from './types';
 
 import {createNode, TokenKind, Node, ast, createNodeArray, NodeArray, AnyTokenOrNode} from './types';
 function createPosForNodesRange(
@@ -178,15 +176,15 @@ const rootParser = objectParser;
 
 export const parse = (codeToParse: string) => {
   const tokens = tokenizer.parse(codeToParse);
-  debugger
+  // debugger
   const res2 = expectEOF(rootParser.parse(tokens));
   const res = expectSingleResult(res2);
   debugger
-  const visitor = (node: Node) => {
-    console.log(node.ast.kind, node.pos.index, node.pos.indexEnd)
-    forEachChild(node, visitor)
-  }
-  forEachChild(res, visitor)
+  // const visitor = (node: Node) => {
+  //   console.log(node.ast.kind, node.pos.index, node.pos.indexEnd)
+  //   forEachChild(node, visitor)
+  // }
+  // forEachChild(res, visitor)
 
   return res;
 };

@@ -15,7 +15,7 @@ import {
   expectSingleResult,
   Token,
   apply,
-} from './lib';
+} from './parsec';
 
 enum TokenKind {
   OpenBracket,

@@ -1,6 +1,8 @@
-import { Token, TokenPosition } from "./lib";
+import { Token, TokenPosition } from "./parsec";
+import { forEachChild } from "./utils";
 
 
+export {Token, TokenPosition};
 
 export enum TokenKind {
     OpenBracket,
@@ -17,9 +19,15 @@ export enum TokenKind {
   }
   
 
+export class Binding {
+
+}
+
   
 export class Node<A extends ast.All = ast.All> {
     __nodeBrand: '';
+    parent?: Node
+    binding?: Binding
     constructor(readonly ast: A, readonly pos: TokenPosition) {}
     // get start() {
     //     return this.position
@@ -29,24 +37,22 @@ export class Node<A extends ast.All = ast.All> {
     // }
   }
   
-  export class NodeArray<A extends ast.All = ast.All> {
+  export interface NodeArray<A extends ast.All = ast.All> extends Array<Node<A>> {
     __nodeArrayBrand: '';
-    [Symbol.iterator]() {
-        return this.nodes[Symbol.iterator]()
-    }
-
-    map: Array<Node>['map']
-
-    constructor(readonly nodes: Node<A>[]) {
-        this.map = nodes.map;
-    }
+    pos: TokenPosition | undefined
   }
   
   export function createNode<A extends ast.All>(ast: A, pos: TokenPosition) {
-    return new Node<A>(ast, pos);
+    const node = new Node<A>(ast, pos);
+    forEachChild(node, child=> {
+        child.parent = node
+    })
+    return node
   }
   export function createNodeArray<A extends ast.All>(nodes: Node<A>[]) {
-    return new NodeArray<A>(nodes);
+    const arr = nodes.slice() as NodeArray<A>;
+    // arr.pos //todo
+    return arr
   }
   
   export namespace ast {

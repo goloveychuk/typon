@@ -30,7 +30,7 @@ enum SemTokens {
      */
     decorator = "decorator"
 }
-Object.keys(_SemTokens)
+// Object.keys(_SemTokens)
 
 export enum TokenTypes {
     asd = 1
