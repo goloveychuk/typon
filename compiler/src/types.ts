@@ -109,3 +109,10 @@ export class Node<A extends ast.All = ast.All> {
   }
   
   export type AnyTokenOrNode = Token<TokenKind> | Node;
+
+
+  export class Program {
+    diagnostic(node: Node,type: 'error'  | 'warning', msg: string) {
+
+    }
+  }

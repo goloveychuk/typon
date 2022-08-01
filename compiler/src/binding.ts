@@ -1,1 +1,1 @@
-import {} from './types'
+import {Binding} from './types'
